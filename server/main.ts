@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as puppeteer from 'puppeteer'
 import * as chrono from 'chrono-node'
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3000;
 let browser: puppeteer.Browser;
 
 app.get('/', (req, res) => res.send('Hello World!'))
