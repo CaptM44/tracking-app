@@ -24,7 +24,7 @@ async function init() {
 //get tracking
 async function getTracking(id: string) {
 
-	let browser = await puppeteer.launch();
+	let browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
 	let page = await browser.newPage();
 	let link = `https://www.fedex.com/apps/fedextrack/?tracknumbers=${id}&locale=en_US`;
 	await page.goto(link);
