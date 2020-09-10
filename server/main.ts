@@ -72,6 +72,16 @@ async function getTracking(trackingNumber: string, carrier?: string) {
 		track.date = dateText && chrono.parseDate(dateText);
 	}
 
+	if (track.carrier == 'USPS') {
+		let statusEl: puppeteer.ElementHandle = await page.waitForSelector('.delivery_status strong', { timeout: selectorTimeout }).catch(t => null);
+		let statusText = statusEl && await page.evaluate(t => t.textContent, statusEl);
+		track.status = normalizeStatus(statusText);
+
+		let dateEl: puppeteer.ElementHandle = await page.waitForSelector('.expected_delivery', { timeout: selectorTimeout }).catch(t => null);
+		let dateText = dateEl && await page.evaluate(t => t.textContent, dateEl);
+		track.date = dateText && chrono.parseDate(dateText);
+	}
+
 	return track;
 }
 
@@ -117,7 +127,9 @@ function getCarrier(trackingNumber: string) {
 	return carriers;
 }
 
+//get url
 function getCarrierUrl(carrier: string, trackingNumber: string) {
 	if (carrier == 'Fedex') { return `https://www.fedex.com/apps/fedextrack/?tracknumbers=${trackingNumber}` }
 	if (carrier == 'UPS') { return `https://www.ups.com/track?tracknum=${trackingNumber}` }
+	if (carrier == 'USPS') { return `https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=${trackingNumber}` }
 }
