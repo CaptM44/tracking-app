@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 const selectorTimeout = 5000;
 let browser: puppeteer.Browser;
 
-app.get('/', (req, res) => res.send('Hello World!'))
+app.get('/', (req, res) => res.send('Tracker App'))
 
 app.get('/track/:id', async (req, res) => {
 	let trackingNumber = req.params.id;
@@ -32,15 +32,17 @@ async function init() {
 async function getTracking(trackingNumber: string, carrier?: string) {
 
 	let track = {
+		trackingNumber: trackingNumber,
+		carrier: carrier,
 		url: null,
 		status: null,
 		date: null
 	};
 
-	if (!carrier) { carrier = getCarrier(trackingNumber)[0] };
-	if (!carrier) { return track }
+	if (!track.carrier) { track.carrier = getCarrier(trackingNumber)[0] };
+	if (!track.carrier) { return track }
 
-	track.url = getCarrierUrl(carrier, trackingNumber);
+	track.url = getCarrierUrl(track.carrier, trackingNumber);
 
 	//open new page
 	let page = await browser.newPage();
@@ -50,7 +52,7 @@ async function getTracking(trackingNumber: string, carrier?: string) {
 	//open url
 	await page.goto(track.url);
 
-	if (carrier == 'Fedex') {
+	if (track.carrier == 'Fedex') {
 		let statusEl: puppeteer.ElementHandle = await page.waitForSelector('.statusChevron_key_status', { timeout: selectorTimeout }).catch(t => null);
 		let statusText = statusEl && await page.evaluate(t => t.textContent, statusEl);
 		track.status = normalizeStatus(statusText);
@@ -60,7 +62,7 @@ async function getTracking(trackingNumber: string, carrier?: string) {
 		track.date = dateText && chrono.parseDate(dateText);
 	}
 
-	if (carrier == 'UPS') {
+	if (track.carrier == 'UPS') {
 		let statusEl: puppeteer.ElementHandle = await page.waitForSelector('#stApp_txtPackageStatus', { timeout: selectorTimeout }).catch(t => null);
 		let statusText = statusEl && await page.evaluate(t => t.textContent, statusEl);
 		track.status = normalizeStatus(statusText);
