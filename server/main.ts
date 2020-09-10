@@ -3,7 +3,7 @@ import * as puppeteer from 'puppeteer'
 import * as chrono from 'chrono-node'
 const app = express()
 const port = process.env.PORT || 3000;
-let browser: puppeteer.Browser;
+// let browser: puppeteer.Browser;
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
@@ -18,12 +18,13 @@ app.listen(port, () => init());
 //init app
 async function init() {
 	console.log(`App listening on port ${port}`)
-	browser = await puppeteer.launch();
+	// browser = await puppeteer.launch();
 }
 
 //get tracking
 async function getTracking(id: string) {
 
+	let browser = await puppeteer.launch();
 	let page = await browser.newPage();
 	let link = `https://www.fedex.com/apps/fedextrack/?tracknumbers=${id}&locale=en_US`;
 	await page.goto(link);
@@ -35,6 +36,7 @@ async function getTracking(id: string) {
 	let statusEl: puppeteer.ElementHandle = await page.waitForSelector('.statusChevron_key_status', { timeout: 5000 }).catch(t => null);
 	let statusText = statusEl && await page.evaluate(t => t.textContent, statusEl);
 	let status = normalizeStatus(statusText);
+	await browser.close();
 
 	return {
 		status: status,

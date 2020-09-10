@@ -4,8 +4,9 @@
 	"description": "",
 	"main": "main.js",
 	"scripts": {
-		"start": "node main.js",
-		"dev": "ts-node-dev main.ts --watch"
+		"start": "npm run tsc && node main.js",
+		"dev": "ts-node-dev main.ts --watch",
+		"tsc": "tsc"
 	},
 	"author": "",
 	"license": "ISC",
