@@ -10,7 +10,7 @@ app.get('/', (req, res) => res.send('Tracker App'))
 
 app.get('/track/:id', async (req, res) => {
 	let trackingNumber = req.params.id;
-	let carrier = req.query.carrier;
+	let carrier = req.query.carrier || null;
 	res.json(await getTracking(trackingNumber, carrier));
 })
 
@@ -29,7 +29,7 @@ async function init() {
 }
 
 //get tracking
-async function getTracking(trackingNumber: string, carrier: string = null) {
+async function getTracking(trackingNumber: string, carrier?: string) {
 
 	let track = {
 		trackingNumber: trackingNumber,
