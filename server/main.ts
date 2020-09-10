@@ -29,7 +29,7 @@ async function init() {
 }
 
 //get tracking
-async function getTracking(trackingNumber: string, carrier?: string) {
+async function getTracking(trackingNumber: string, carrier: string = null) {
 
 	let track = {
 		trackingNumber: trackingNumber,
