@@ -6,8 +6,8 @@
 	"scripts": {
 		"start": "node main.js",
 		"dev": "ts-node-dev main.ts --watch",
-		"tsc": "tsc",
-		"postinstall": "npm run tsc"
+		"build": "tsc",
+		"postinstall": "npm run build"
 	},
 	"author": "",
 	"license": "ISC",
