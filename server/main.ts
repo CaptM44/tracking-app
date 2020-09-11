@@ -87,12 +87,12 @@ async function getTracking(trackingNumber: string, carrier?: string) {
 
 //normalize status
 function normalizeStatus(status: string) {
-	let s = status && status.toLowerCase();
 
-	if (s == 'initiated') { return 'Initiated' }
-	if (s == 'picked up') { return 'Picked up' }
-	if (s == 'in transit') { return 'In Transit' }
-	if (s == 'delivered') { return 'Delivered' }
+	if (/Initiated/.test(status)) { return 'Initiated' }
+	if (/Picked up/.test(status)) { return 'Picked up' }
+	if (/In Transit/.test(status)) { return 'In Transit' }
+	if (/Delivered/.test(status)) { return 'Delivered' }
+	if (/Out for Delivery/.test(status)) { return 'Out for Delivery' }
 
 	return status;
 }
