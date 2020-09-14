@@ -1,0 +1,17 @@
+{
+	"name": "tracker-app",
+	"version": "1.0.0",
+	"description": "",
+	"scripts": {
+		"dev": "tsc -w",
+		"build": "tsc"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"typescript": "^4.0.2"
+	},
+	"devDependencies": {
+		"@types/chrome": "0.0.123"
+	}
+}
