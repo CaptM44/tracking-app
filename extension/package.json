@@ -4,12 +4,15 @@
 	"description": "",
 	"scripts": {
 		"dev": "tsc -w",
-		"build": "tsc"
+		"build": "tsc && browserify background.js | uglifyjs > background.bundle.js"
 	},
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"typescript": "^4.0.2"
+		"browserify": "^16.5.2",
+		"typescript": "^4.0.2",
+		"uglify-es": "^3.3.9",
+		"webextension-polyfill-ts": "^0.20.0"
 	},
 	"devDependencies": {
 		"@types/chrome": "0.0.123"
