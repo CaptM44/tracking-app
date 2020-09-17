@@ -4,8 +4,9 @@
 	"description": "",
 	"scripts": {
 		"dev": "tsc -w",
-		"build": "tsc",
-		"sass": "node-sass ./ -o ./ -r false"
+		"build": "npm run build:ts && npm run build:scss",
+		"build:ts": "tsc",
+		"build:scss": "node-sass ./ -o ./ -r false"
 	},
 	"author": "",
 	"license": "ISC",

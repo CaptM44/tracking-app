@@ -12,5 +12,10 @@
 		"persistent": false
 	},
 	"permissions": ["activeTab", "storage", "contextMenus"],
-	"options_page": "options.html"
+	"options_page": "options.html",
+	"icons": {
+		"16": "img.png",
+		"48": "img.png",
+		"128": "img.png"
+	}
 }
