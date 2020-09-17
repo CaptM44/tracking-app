@@ -2,15 +2,15 @@
 	"manifest_version": 2,
 	"name": "Tracker App",
 	"version": "1.0.0",
-	"page_action": {
+	"browser_action": {
 		"default_icon": "img.png",
 		"default_popup": "popup.html",
-		"default_title": "My custom google page!"
+		"default_title": "Tracker App"
 	},
 	"background": {
-		"scripts": ["background.bundle.js"],
+		"scripts": ["utils.js", "background.js"],
 		"persistent": false
 	},
-	"permissions": ["activeTab", "declarativeContent", "storage"],
+	"permissions": ["activeTab", "storage", "contextMenus"],
 	"options_page": "options.html"
 }
