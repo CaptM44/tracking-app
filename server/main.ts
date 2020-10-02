@@ -81,6 +81,8 @@ async function getTracking(trackingNumber: string, carrier?: string) {
 		track.date = dateText && chrono.parseDate(dateText);
 	}
 
+	await browser.close();
+
 	return track;
 }
 
