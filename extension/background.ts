@@ -8,9 +8,7 @@ async function init() {
 
   setInterval(() => state++, 1000);
 
-  chrome.runtime.onMessage.addListener((msg, sender, send) => {
-    if (msg.route == '/index') { send(state) }
-  });
+
 
 
   chrome.contextMenus.create({
@@ -18,9 +16,21 @@ async function init() {
     contexts: ["selection"],
     id: 'ADD:TRACK'
   });
-  chrome.contextMenus.onClicked.addListener(info => {
-    if (info.menuItemId != 'ADD:TRACK') { return }
-    alert(info.selectionText);
-  });
+
 
 }
+
+async function addTrack(trackingNumber: string) {
+  let tracks = await storage.get<string[]>('tracks') || [];
+  tracks.push(trackingNumber);
+  await storage.set('tracks', tracks);
+}
+
+chrome.runtime.onMessage.addListener((msg, sender, send) => {
+  if (msg.route == '/index') { send(state) }
+});
+
+chrome.contextMenus.onClicked.addListener(info => {
+  if (info.menuItemId != 'ADD:TRACK') { return }
+  addTrack(info.selectionText);
+});

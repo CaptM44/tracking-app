@@ -5,12 +5,19 @@ class background {
 }
 
 class storage {
+  static cache = new Map<string, Promise<any>>();
+
   static async set<T>(key: string, value: T) {
+    // this.cache.set(key, Promise.resolve(value));
     await new Promise(t => chrome.storage.sync.set({ [key]: value }, t));
   }
 
   static async get<T>(key: string) {
-    return (await new Promise(t => chrome.storage.sync.get(key, t)))[key] as T;
+    // if (!this.cache.has(key)) {
+    // this.cache.set(key, new Promise(t => chrome.storage.sync.get(key, t)).then(t => t[key]));
+    // }
+    // return await this.cache.get(key) as T;
+    return await new Promise(t => chrome.storage.sync.get(key, t)).then(t => t[key]);
   }
 }
 

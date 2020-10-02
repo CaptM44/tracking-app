@@ -4,7 +4,6 @@ import * as chrono from 'chrono-node'
 const app = express()
 const port = process.env.PORT || 3000;
 const selectorTimeout = 5000;
-let browser: puppeteer.Browser;
 
 app.get('/', (req, res) => res.send('Tracker App'))
 
@@ -25,7 +24,6 @@ app.listen(port, () => init());
 //init app
 async function init() {
 	console.log(`App listening on port ${port}`)
-	browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
 }
 
 //get tracking
@@ -45,6 +43,7 @@ async function getTracking(trackingNumber: string, carrier?: string) {
 	track.url = getCarrierUrl(track.carrier, trackingNumber);
 
 	//open new page
+	let browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
 	let page = await browser.newPage();
 	//optimize ignoring resources
 	await page.setRequestInterception(true);
@@ -89,6 +88,7 @@ async function getTracking(trackingNumber: string, carrier?: string) {
 function normalizeStatus(status: string) {
 
 	if (/Initiated/.test(status)) { return 'Initiated' }
+	if (/Label created/.test(status)) { return 'Label Created' }
 	if (/Picked up/.test(status)) { return 'Picked up' }
 	if (/In Transit/.test(status)) { return 'In Transit' }
 	if (/Delivered/.test(status)) { return 'Delivered' }

@@ -3,11 +3,30 @@
 
 <head>
 	<link rel="stylesheet" href="popup.css">
+	<link rel="stylesheet" href="\node_modules\bootstrap\dist\css\bootstrap.min.css">
+	<link rel="stylesheet" href="\node_modules\font-awesome\css\font-awesome.css">
+
+	<script src="\node_modules\jquery\dist\jquery.slim.min.js"></script>
+	<script src="\node_modules/popper.js/dist/umd/popper.min.js"></script>
+	<script src="\node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 
-<body>
-	<div class="test"><label>test</label></div>
-	<div id="index"></div>
+<body class="p-3" style="min-width: 400px">
+
+	<h3>Tracker App</h3>
+	<table class="table table-sm mb-0">
+		<thead>
+			<tr>
+				<th>tracking #</th>
+				<th style="width:1%"></th>
+				<th style="width:1%"></th>
+			</tr>
+		</thead>
+		<tbody class="tracks">
+
+		</tbody>
+	</table>
+
 	<script src="utils.js"></script>
 	<script src="popup.js"></script>
 </body>
