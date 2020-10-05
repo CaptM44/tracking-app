@@ -1,6 +1,6 @@
 class background {
-  static async get<T>(route: string) {
-    return await new Promise<T>(t => chrome.runtime.sendMessage({ route }, t));
+  static async get<T>(route: string, data?: any) {
+    return await new Promise<T>(t => chrome.runtime.sendMessage({ route, data }, t));
   }
 }
 
@@ -18,6 +18,15 @@ class storage {
     // }
     // return await this.cache.get(key) as T;
     return await new Promise(t => chrome.storage.sync.get(key, t)).then(t => t[key]);
+  }
+}
+
+class api {
+  static baseUrl = 'https://mmorgan-tracking-app.herokuapp.com';
+
+  static async getStatus(trackingNumber: string): Promise<string> {
+    let track = await fetch(`${this.baseUrl}/track/${trackingNumber}`).then(t => t.json());
+    return track.status;
   }
 }
 
