@@ -33,6 +33,12 @@ async function addTrack(trackingNumber: string) {
   let tracks = await storage.get<string[]>('tracks') || [];
   tracks.push(trackingNumber);
   await storage.set('tracks', tracks);
+
+  await notify('Track added', trackingNumber);
+}
+
+async function notify(title: string, message?: string) {
+  return await new Promise<string>(r => chrome.notifications.create(null, { type: 'basic', iconUrl: 'img.png', title, message, silent: true }, r));
 }
 
 // chrome.runtime.onMessage.addListener((msg, sender, send) => {
@@ -46,3 +52,5 @@ chrome.contextMenus.onClicked.addListener(info => {
 chrome.alarms.onAlarm.addListener(info => {
   if (info.name == 'alarm1') { update() }
 });
+
+

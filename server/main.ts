@@ -95,7 +95,11 @@ function normalizeStatus(status: string) {
 	if (/In Transit/.test(status)) { return 'In Transit' }
 	if (/Delivered/.test(status)) { return 'Delivered' }
 	if (/Out for Delivery/.test(status)) { return 'Out for Delivery' }
-
+	//usps
+	if (/On Its Way to USPS/.test(status)) { return 'On its way to carrier' }
+	//fedex
+	if (/Shipment exception/.test(status)) { return 'Shipment Exception' }
+	
 	return status;
 }
 

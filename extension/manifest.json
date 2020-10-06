@@ -14,7 +14,8 @@
 	"permissions": [
 		"storage",
 		"contextMenus",
-		"alarms"
+		"alarms",
+		"notifications"
 	],
 	"options_page": "options.html",
 	"icons": {
