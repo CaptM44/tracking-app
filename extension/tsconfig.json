@@ -8,5 +8,5 @@
 			"es2015"
 		],
 	},
-	"include": ["./", "../types.ts"]
+	"include": ["./", "../server/types.ts"]
 }
