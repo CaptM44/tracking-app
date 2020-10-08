@@ -5,7 +5,7 @@ import * as cors from 'cors';
 
 const app = express();
 const port = process.env.PORT || 3000;
-const selectorTimeout = 5000;
+const selectorTimeout = 8000;
 
 app.use(cors());
 
