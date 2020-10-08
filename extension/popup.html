@@ -11,23 +11,33 @@
 	<script src="\node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 
-<body class="p-3" style="min-width: 600px">
-
-	<h3>Tracker App</h3>
+<body class="p-3">
+	<div class="header">
+		<h3>Tracker App</h3>
+		<div class="dropdown ml-auto">
+			<div class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i></div>
+			<div class="dropdown-menu dropdown-menu-right">
+				<div class="dropdown-item refresh-btn"><i class="fa fa-refresh mr-2"></i> Refesh all</div>
+				<div class="dropdown-item disabled"><i class="fa fa-clock-o mr-2"></i> Set interval...</div>
+				<div class="dropdown-item options-btn"><i class="fa fa-cog mr-2"></i> Options...</div>
+			</div>
+		</div>
+	</div>
 	<table class="table table-sm mb-0">
 		<thead>
 			<tr>
-				<th style="width:1%"></th>
+				<th class="col-min"></th>
 				<th>tracking #</th>
 				<th>status</th>
-				<th>date</th>
-				<th style="width:1%"></th>
+				<th>delivery date</th>
+				<th class="col-min"></th>
 			</tr>
 		</thead>
-		<tbody class="tracks">
-
-		</tbody>
+		<tbody class="tracks"></tbody>
 	</table>
+	<div class="no-tracks d-none">
+		No tracking numbers have been added.
+	</div>
 
 	<script src="utils.js"></script>
 	<script src="popup.js"></script>

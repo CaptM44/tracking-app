@@ -11,7 +11,6 @@ class storage {
     // this.cache.set(key, Promise.resolve(value));
     await new Promise(t => chrome.storage.sync.set({ [key]: value }, t));
   }
-
   static async get<T>(key: string) {
     // if (!this.cache.has(key)) {
     //   this.cache.set(key, new Promise(t => chrome.storage.sync.get(key, t)).then(t => t[key]));
@@ -23,10 +22,17 @@ class storage {
   static async getTracks() {
     return await this.get<Track[]>('tracks') || [];
   }
-
   static async setTracks(tracks: Track[]) {
     return await this.set('tracks', tracks);
   }
+
+  static async getBadges() {
+    return await this.get<number>('badges') || 0;
+  }
+  static async setBadges(badges: number) {
+    return await this.set('badges', badges);
+  }
+
 }
 
 class api {
@@ -43,6 +49,11 @@ class api {
 
 }
 
+
 function promisify<T, U>(fn: (args: T, cb?: (u?: U) => void) => void, context?: any): (args?: T) => Promise<U> {
   return t => new Promise<U>(r => (context ? fn.bind(context) : fn)(t, r));
+}
+
+function formatDate(date: Date | string) {
+  return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
