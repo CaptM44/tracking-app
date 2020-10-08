@@ -1,11 +1,15 @@
-import * as express from 'express'
-import * as puppeteer from 'puppeteer'
-import * as chrono from 'chrono-node'
-const app = express()
+import * as express from 'express';
+import * as puppeteer from 'puppeteer';
+import * as chrono from 'chrono-node';
+import * as cors from 'cors';
+
+const app = express();
 const port = process.env.PORT || 3000;
 const selectorTimeout = 5000;
 
-app.get('/', (req, res) => res.send('Tracker App'))
+app.use(cors());
+
+app.get('/', (req, res) => res.send('Tracker App'));
 
 app.get('/track/:id', async (req, res) => {
 	let trackingNumber = req.params.id;
@@ -29,7 +33,7 @@ async function init() {
 //get tracking
 async function getTracking(trackingNumber: string, carrier?: string) {
 
-	let track = {
+	let track: Track = {
 		trackingNumber: trackingNumber,
 		carrier: carrier,
 		url: null,
@@ -95,11 +99,15 @@ function normalizeStatus(status: string) {
 	if (/In Transit/.test(status)) { return 'In Transit' }
 	if (/Delivered/.test(status)) { return 'Delivered' }
 	if (/Out for Delivery/.test(status)) { return 'Out for Delivery' }
+
 	//usps
 	if (/On Its Way to USPS/.test(status)) { return 'On its way to carrier' }
+	if (/Label Created, not yet in system/.test(status)) { return 'Label Created' }
+	if (/Pre-Shipment/.test(status)) { return 'Pre-Shipment' }
+
 	//fedex
 	if (/Shipment exception/.test(status)) { return 'Shipment Exception' }
-	
+
 	return status;
 }
 

@@ -1,5 +1,5 @@
 class background {
-  static async get<T>(route: string, data?: any) {
+  static async execute<T>(route: string, data?: any) {
     return await new Promise<T>(t => chrome.runtime.sendMessage({ route, data }, t));
   }
 }
@@ -14,20 +14,33 @@ class storage {
 
   static async get<T>(key: string) {
     // if (!this.cache.has(key)) {
-    // this.cache.set(key, new Promise(t => chrome.storage.sync.get(key, t)).then(t => t[key]));
+    //   this.cache.set(key, new Promise(t => chrome.storage.sync.get(key, t)).then(t => t[key]));
     // }
     // return await this.cache.get(key) as T;
-    return await new Promise(t => chrome.storage.sync.get(key, t)).then(t => t[key]);
+    return await new Promise(t => chrome.storage.sync.get(key, t)).then(t => t[key] as T);
+  }
+
+  static async getTracks() {
+    return await this.get<Track[]>('tracks') || [];
+  }
+
+  static async setTracks(tracks: Track[]) {
+    return await this.set('tracks', tracks);
   }
 }
 
 class api {
   static baseUrl = 'https://mmorgan-tracking-app.herokuapp.com';
 
-  static async getStatus(trackingNumber: string): Promise<string> {
-    let track = await fetch(`${this.baseUrl}/track/${trackingNumber}`).then(t => t.json());
-    return track.status;
+  static async fetch<T>(url: string) {
+    return await fetch(`${this.baseUrl}${url}`).then(t => t.json()).then(t => t as T);
   }
+
+  static async fetchTrack(trackingNumber: string) {
+    return await this.fetch<Track>(`/track/${trackingNumber}`);
+  }
+
+
 }
 
 function promisify<T, U>(fn: (args: T, cb?: (u?: U) => void) => void, context?: any): (args?: T) => Promise<U> {
