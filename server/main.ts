@@ -133,7 +133,7 @@ function getCarrier(trackingNumber: string) {
 	let usps = [
 		/(\b\d{30}\b)|(\b91\d+\b)|(\b\d{20}\b)/,
 		/^E\D{1}\d{9}\D{2}$|^9\d{15,21}$/,
-		/^91[0-9]+$/,
+		/^9[1-5][0-9]+$/,
 		/^[A-Za-z]{2}[0-9]+US$/,
 	];
 	if (usps.some(t => t.test(trackingNumber))) { carriers.push('USPS') }
