@@ -101,9 +101,10 @@ function normalizeStatus(status: string) {
 	if (/Out for Delivery/.test(status)) { return 'Out for Delivery' }
 
 	//usps
-	if (/On Its Way to USPS/.test(status)) { return 'On its way to carrier' }
+	if (/On Its Way to USPS/.test(status)) { return 'On Its Way to Carrier' }
 	if (/Label Created, not yet in system/.test(status)) { return 'Label Created' }
 	if (/Pre-Shipment/.test(status)) { return 'Pre-Shipment' }
+	if (/USPS Currently Awaiting Package/.test(status)) { return 'Carrier Awaiting Package' }
 
 	//fedex
 	if (/Shipment exception/.test(status)) { return 'Shipment Exception' }
