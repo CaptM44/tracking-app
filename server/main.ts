@@ -93,21 +93,25 @@ async function getTracking(trackingNumber: string, carrier?: string) {
 //normalize status
 function normalizeStatus(status: string) {
 
-	if (/Initiated/.test(status)) { return 'Initiated' }
-	if (/Label created/.test(status)) { return 'Label Created' }
-	if (/Picked up/.test(status)) { return 'Picked up' }
-	if (/In Transit/.test(status)) { return 'In Transit' }
-	if (/Delivered/.test(status)) { return 'Delivered' }
-	if (/Out for Delivery/.test(status)) { return 'Out for Delivery' }
+	if (/Initiated/i.test(status)) { return 'Initiated' }
+	if (/Label created/i.test(status)) { return 'Label Created' }
+	if (/Picked up/i.test(status)) { return 'Picked up' }
+	if (/In Transit/i.test(status)) { return 'In Transit' }
+	if (/Delivered/i.test(status)) { return 'Delivered' }
+	if (/Out for Delivery/i.test(status)) { return 'Out for Delivery' }
 
 	//usps
-	if (/On Its Way to USPS/.test(status)) { return 'On Its Way to Carrier' }
-	if (/Label Created, not yet in system/.test(status)) { return 'Label Created' }
-	if (/Pre-Shipment/.test(status)) { return 'Pre-Shipment' }
-	if (/USPS Currently Awaiting Package/.test(status)) { return 'Carrier Awaiting Package' }
+	if (/On Its Way to USPS/i.test(status)) { return 'On Its Way to Carrier' }
+	if (/Label Created, not yet in system/i.test(status)) { return 'Label Created' }
+	if (/Pre-Shipment/i.test(status)) { return 'Pre-Shipment' }
+	if (/USPS Currently Awaiting Package/i.test(status)) { return 'Carrier Awaiting Package' }
+	if (/In-Transit/i.test(status)) { return 'In Transit' }
 
 	//fedex
-	if (/Shipment exception/.test(status)) { return 'Shipment Exception' }
+	if (/Shipment exception/i.test(status)) { return 'Shipment Exception' }
+
+	//UPS
+	if (/Shipment Ready for UPS/i.test(status)) { return 'Shipment Ready' }
 
 	return status;
 }
