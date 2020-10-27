@@ -27,6 +27,7 @@
 		<thead>
 			<tr>
 				<th class="col-min"></th>
+				<th>description</th>
 				<th>tracking #</th>
 				<th>status</th>
 				<th>delivery date</th>
@@ -37,6 +38,22 @@
 	</table>
 	<div class="no-tracks d-none">
 		No tracking numbers have been added.
+	</div>
+
+	<!-- Modals -->
+	<div class="modal fade" id="edit-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">Edit</div>
+				<div class="modal-body">
+					<input class="form-control edit-description" placeholder="description">
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-primary edit-save-btn">Save changes</button>
+					<button class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<script src="utils.js"></script>
