@@ -4,7 +4,7 @@
 (async function () {
 
 
-	$('body').on('click', '.refresh-btn', async e => {
+	$('body').on('click', '.refresh-all-btn', async e => {
 		await background.execute('/update');
 		render();
 	});
@@ -77,6 +77,7 @@ async function render() {
 					<div class="dropdown">
 						<div class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></div>
 						<div class="dropdown-menu dropdown-menu-right">
+							<div class="dropdown-item refresh-btn disabled" data-id="${track.trackingNumber}"><i class="fa fa-refresh fa-fw mr-1"></i> Refresh</div>
 							<div class="dropdown-item edit-btn" data-id="${track.trackingNumber}"><i class="fa fa-edit fa-fw mr-1"></i> Edit</div>
 							<div class="dropdown-item delete-btn" data-id="${track.trackingNumber}"><i class="fa fa-trash fa-fw mr-1"></i> Delete</div>
 							<div class="dropdown-item move-up-btn" data-id="${track.trackingNumber}"><i class="fa fa-level-up fa-fw mr-1"></i> Move up</div>
