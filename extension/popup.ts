@@ -66,9 +66,11 @@ async function render() {
 	for (let track of tracks) {
 		$('.tracks').append(/* html */`
 			<tr>
-				<td title="${track.carrier}"><img class="carrier-icon" src="/images/${track.carrier}.png"></td>
+				${track.carrier ?/* html */`<td title="${track.carrier}"><img class="carrier-icon" src="/images/${track.carrier}.png"></td>` : ''}
+				${!track.carrier ?/* html */`<td class="text-center"><i class="fa fa-question-circle"></i></td>` : ''}
 				<td>${track.description || ''}</td>
-				<td><a href="${track.url}" target="_blank">${track.trackingNumber}</a></td>
+				${track.url ?/* html */`<td><a href="${track.url}" target="_blank">${track.trackingNumber}</a></td>` : ''}
+				${!track.url ?/* html */`<td>${track.trackingNumber}</td>` : ''}
 				<td class="${track.status == 'Delivered' ? 'text-success' : ''}">${track.status || 'N/A'}</td>
 				<td title="update count: ${track.updateCount}">${track.date ? formatDate(track.date) : 'N/A'}</td>
 				<td>
@@ -88,4 +90,3 @@ async function render() {
 
 	$('.no-tracks').toggleClass('d-none', !!tracks.length);
 }
-
