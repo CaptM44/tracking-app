@@ -13,6 +13,11 @@
 		await new Promise(r => chrome.runtime.openOptionsPage(r));
 	});
 
+	$('body').on('click', '.sort-btn', async e => {
+		await background.execute('/sort');
+		render();
+	});
+
 	$('body').on('click', '.delete-btn', async e => {
 		let id = $(e.currentTarget).data('id');
 		await background.execute('/tracks/delete', id);
@@ -70,10 +75,10 @@ async function render() {
 					<div class="dropdown">
 						<div class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></div>
 						<div class="dropdown-menu dropdown-menu-right">
-							<div class="dropdown-item edit-btn" data-id="${track.trackingNumber}"><i class="fa fa-edit mr-2"></i> Edit</div>
-							<div class="dropdown-item delete-btn" data-id="${track.trackingNumber}"><i class="fa fa-trash mr-2"></i> Delete</div>
-							<div class="dropdown-item move-up-btn" data-id="${track.trackingNumber}"><i class="fa fa-level-up mr-2"></i> Move up</div>
-							<div class="dropdown-item move-down-btn" data-id="${track.trackingNumber}"><i class="fa fa-level-down mr-2"></i> Move down</div>
+							<div class="dropdown-item edit-btn" data-id="${track.trackingNumber}"><i class="fa fa-edit fa-fw mr-1"></i> Edit</div>
+							<div class="dropdown-item delete-btn" data-id="${track.trackingNumber}"><i class="fa fa-trash fa-fw mr-1"></i> Delete</div>
+							<div class="dropdown-item move-up-btn" data-id="${track.trackingNumber}"><i class="fa fa-level-up fa-fw mr-1"></i> Move up</div>
+							<div class="dropdown-item move-down-btn" data-id="${track.trackingNumber}"><i class="fa fa-level-down fa-fw mr-1"></i> Move down</div>
 						</div>
 					</div>
 				</td>

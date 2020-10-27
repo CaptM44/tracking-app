@@ -8,7 +8,7 @@ async function init() {
   chrome.contextMenus.create({ title: `Tracker App - add track for "%s"`, contexts: ["selection"], id: 'ADD:TRACK' });
 
   await setBadge(0);
-  await update();
+  // await update();
 }
 
 async function update() {
@@ -60,6 +60,13 @@ chrome.runtime.onMessage.addListener((msg, sender, send) => {
     //update
     if (msg.route == '/update') {
       await update();
+      resolve()
+    }
+    //update
+    if (msg.route == '/sort') {
+      let tracks = await storage.getTracks();
+      tracks.sort((a, b) => new Date(a.date || new Date()).getTime() - new Date(b.date || new Date()).getTime())
+      await storage.setTracks(tracks);
       resolve()
     }
     //get tracks
