@@ -55,6 +55,15 @@
 		render();
 	});
 
+
+	$('body').on('click auxclick', 'a', async e => {
+		if (e.ctrlKey || e.button == 1) {
+			e.preventDefault();
+			await new Promise(r => chrome.tabs.create({ url: e.currentTarget.href, selected: false }, r));
+		}
+	});
+
+
 	await render();
 	await background.execute('/badge/clear');
 
