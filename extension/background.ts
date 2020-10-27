@@ -39,11 +39,15 @@ async function update() {
 
 async function addTrack(trackingNumber: string) {
   let tracks = await storage.getTracks();
-  tracks.push({ trackingNumber });
-  await storage.setTracks(tracks);
 
-
-  await notifySilent('Track added', trackingNumber);
+  if (!tracks.find(t => t.trackingNumber == trackingNumber)) {
+    tracks.push({ trackingNumber });
+    await storage.setTracks(tracks);
+    await notifySilent('Track added', trackingNumber);
+  }
+  else {
+    await notifySilent('Track already exists', trackingNumber);
+  }
 }
 
 async function notify(title: string, message?: string) {
