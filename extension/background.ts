@@ -18,12 +18,15 @@ async function update() {
   console.log('updating...');
 
 
-  let tracks = await storage.getTracks();
-  for (let track of tracks) {
-    let newTrack = await api.fetchTrack(track.trackingNumber);
+  let trackingNumbers = (await storage.getTracks()).map(t => t.trackingNumber);
+  for (let trackingNumber of trackingNumbers) {
+    let newTrack = await api.fetchTrack(trackingNumber);
+
+    let tracks = await storage.getTracks();
+    let track = tracks.find(t => t.trackingNumber == trackingNumber);
 
     if (newTrack.status != track.status) {
-      notify(newTrack.status, newTrack.trackingNumber);
+      await notify(newTrack.status, newTrack.trackingNumber);
       let badges = await storage.getBadges() + 1;
       await setBadge(badges);
       await storage.setBadges(badges);
