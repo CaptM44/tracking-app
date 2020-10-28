@@ -148,7 +148,13 @@ chrome.runtime.onMessage.addListener((msg, sender, send) => {
       }
       resolve();
     }
-    if (msg.route == '/unread/clear') {
+    //get unreads
+    if (msg.route == '/unreads') {
+      let unreads = await storage.getUnreadTracks();
+      resolve(unreads)
+    }
+    //clear unreads
+    if (msg.route == '/unreads/clear') {
       await storage.setUnreadTracks([]);
       await setBadge(0);
       resolve();

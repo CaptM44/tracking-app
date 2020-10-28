@@ -65,7 +65,12 @@
 
 
 	await render();
-	await background.execute('/unread/clear');
+
+	//flash unread rows
+	let unreads = await background.execute<string[]>('/unreads');
+	unreads.forEach(t => $(`.tracks tr[data-id='${t}'`).addClass('flash'));
+	setTimeout(() => $('.tracks tr').removeClass('flash'), 1000);
+	await background.execute('/unreads/clear');
 
 })();
 
@@ -74,7 +79,7 @@ async function render() {
 	$('.tracks').empty();
 	for (let track of tracks) {
 		$('.tracks').append(/* html */`
-			<tr>
+			<tr data-id="${track.trackingNumber}">
 				${track.carrier ?/* html */`<td title="${track.carrier}"><img class="carrier-icon" src="/images/${track.carrier}.png"></td>` : ''}
 				${!track.carrier ?/* html */`<td class="text-center"><i class="fa fa-question-circle"></i></td>` : ''}
 				<td>${track.description || ''}</td>
