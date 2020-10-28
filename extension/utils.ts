@@ -26,11 +26,11 @@ class storage {
     return await this.set('tracks', tracks);
   }
 
-  static async getBadges() {
-    return await this.get<number>('badges') || 0;
+  static async getUnreadTracks() {
+    return await this.get<string[]>('unreadTracks') || [];
   }
-  static async setBadges(badges: number) {
-    return await this.set('badges', badges);
+  static async setUnreadTracks(unreadTracks: string[]) {
+    return await this.set('unreadTracks', unreadTracks);
   }
 
 }

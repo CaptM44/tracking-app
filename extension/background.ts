@@ -27,9 +27,12 @@ async function update() {
 
     if (newTrack.status != track.status) {
       await notify(newTrack.status, newTrack.trackingNumber);
-      let badges = await storage.getBadges() + 1;
-      await setBadge(badges);
-      await storage.setBadges(badges);
+      let unreadTracks = await storage.getUnreadTracks();
+      if (!unreadTracks.includes(trackingNumber)) {
+        unreadTracks.push(trackingNumber);
+        await storage.setUnreadTracks(unreadTracks);
+        setBadge(unreadTracks.length);
+      }
     }
 
     Object.assign(track, newTrack);
@@ -145,8 +148,8 @@ chrome.runtime.onMessage.addListener((msg, sender, send) => {
       }
       resolve();
     }
-    if (msg.route == '/badge/clear') {
-      await storage.setBadges(0)
+    if (msg.route == '/unread/clear') {
+      await storage.setUnreadTracks([]);
       await setBadge(0);
       resolve();
     }

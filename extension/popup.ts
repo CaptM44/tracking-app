@@ -65,7 +65,7 @@
 
 
 	await render();
-	await background.execute('/badge/clear');
+	await background.execute('/unread/clear');
 
 })();
 
