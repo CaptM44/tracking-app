@@ -78,13 +78,13 @@ async function render() {
 	let tracks = await background.execute<Track[]>('/tracks');
 	$('.tracks').empty();
 	for (let track of tracks) {
-		$('.tracks').append(/* html */`
+		$('.tracks').append(parseHtml(/* html */`
 			<tr data-id="${track.trackingNumber}">
-				${track.carrier ?/* html */`<td title="${track.carrier}"><img class="carrier-icon" src="/images/${track.carrier}.png"></td>` : ''}
-				${!track.carrier ?/* html */`<td class="text-center"><i class="fa fa-question-circle"></i></td>` : ''}
+				*if(${!!track.carrier}){<td title="${track.carrier}"><img class="carrier-icon" src="/images/${track.carrier}.png"></td>}
+				*if(${!track.carrier}){<td class="text-center"><i class="fa fa-question-circle"></i></td>}
 				<td>${track.description || ''}</td>
-				${track.url ?/* html */`<td><a href="${track.url}" target="_blank">${track.trackingNumber}</a></td>` : ''}
-				${!track.url ?/* html */`<td>${track.trackingNumber}</td>` : ''}
+				*if(${!!track.url}){<td><a href="${track.url}" target="_blank">${track.trackingNumber}</a></td>}
+				*if(${!track.url}){<td>${track.trackingNumber}</td>}
 				<td class="${track.status == 'Delivered' ? 'text-success' : ''}">${track.status || 'N/A'}</td>
 				<td title="update count: ${track.updateCount}">${track.date ? formatDate(track.date) : 'N/A'}</td>
 				<td>
@@ -100,8 +100,24 @@ async function render() {
 					</div>
 				</td>
 			</tr>
-		`);
+		`));
 	}
 
 	$('.no-tracks').toggleClass('d-none', !!tracks.length);
+}
+
+function parseHtml(str: string) {
+	let done = false;
+	while (!done) {
+		let i = /\*if\(([^\)]+)\)\{([^\}]+)\}/.exec(str);
+		if (i) {
+			let condition = !!JSON.parse(i[1].replace(/'/g, '"'));
+			let val = i[2];
+			str = str.replace(i[0], condition ? val : '');
+		}
+		else {
+			done = true;
+		}
+	}
+	return str;
 }
