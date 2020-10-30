@@ -43,6 +43,33 @@ async function update() {
   console.log('updated');
 }
 
+async function updateTrack(trackingNumber: string) {
+  console.log(`updating ${trackingNumber}...`);
+  await storage.setLoadingTrack(trackingNumber, true);
+  await popup.execute('/loading');
+
+  let oldTrack = await storage.getTrack(trackingNumber);
+  let track = await api.fetchTrack(trackingNumber);
+
+  if (track.status != oldTrack.status) {
+    await notify(track.status, track.trackingNumber);
+    let unreadTracks = await storage.getUnreadTracks();
+    if (!unreadTracks.includes(trackingNumber)) {
+      unreadTracks.push(trackingNumber);
+      await storage.setUnreadTracks(unreadTracks);
+      setBadge(unreadTracks.length);
+    }
+  }
+
+  track.updateCount = (track.updateCount || 0) + 1;
+  await storage.setTrack(track);
+
+  await storage.setLoadingTrack(trackingNumber, false);
+  await popup.execute('/loading');
+  console.log(`updated ${trackingNumber}`);
+}
+
+
 async function addTrack(trackingNumber: string) {
   let tracks = await storage.getTracks();
 
@@ -72,7 +99,7 @@ chrome.runtime.onMessage.addListener((msg, sender, send) => {
       await update();
       resolve()
     }
-    //update
+    //sort
     if (msg.route == '/sort') {
       let tracks = await storage.getTracks();
       tracks.sort((a, b) => new Date(a.date || new Date()).getTime() - new Date(b.date || new Date()).getTime())
@@ -109,6 +136,12 @@ chrome.runtime.onMessage.addListener((msg, sender, send) => {
         tracks.splice(i, 1);
         await storage.setTracks(tracks);
       }
+      resolve();
+    }
+    //refresh track
+    if (msg.route == '/tracks/refresh') {
+      let id: string = msg.data;
+      await updateTrack(id);
       resolve();
     }
     //move track up
@@ -159,7 +192,12 @@ chrome.runtime.onMessage.addListener((msg, sender, send) => {
       await setBadge(0);
       resolve();
     }
-
+    //get loading tracks
+    if (msg.route == '/loading') {
+      let loadingTracks = await storage.getLoadingTracks();
+      resolve(loadingTracks)
+    }
+    resolve();
   }).then(send)
   return true;
 });

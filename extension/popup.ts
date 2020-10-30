@@ -3,7 +3,7 @@
 
 (async function () {
 
-
+	//menu buttons
 	$('body').on('click', '.refresh-all-btn', async e => {
 		await background.execute('/update');
 		render();
@@ -15,6 +15,13 @@
 
 	$('body').on('click', '.sort-btn', async e => {
 		await background.execute('/sort');
+		render();
+	});
+
+	//item buttons
+	$('body').on('click', '.refresh-btn', async e => {
+		let id = $(e.currentTarget).data('id');
+		await background.execute('/tracks/refresh', id);
 		render();
 	});
 
@@ -55,7 +62,7 @@
 		render();
 	});
 
-
+	//page events
 	$('body').on('click auxclick', 'a', async e => {
 		if (e.ctrlKey || e.button == 1) {
 			e.preventDefault();
@@ -64,6 +71,7 @@
 	});
 
 
+	//render page
 	await render();
 
 	//flash unread rows
@@ -91,7 +99,7 @@ async function render() {
 					<div class="dropdown">
 						<div class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></div>
 						<div class="dropdown-menu dropdown-menu-right">
-							<div class="dropdown-item refresh-btn disabled" data-id="${track.trackingNumber}"><i class="fa fa-refresh fa-fw mr-1"></i> Refresh</div>
+							<div class="dropdown-item refresh-btn" data-id="${track.trackingNumber}"><i class="fa fa-refresh fa-fw mr-1"></i> Refresh</div>
 							<div class="dropdown-item edit-btn" data-id="${track.trackingNumber}"><i class="fa fa-edit fa-fw mr-1"></i> Edit</div>
 							<div class="dropdown-item delete-btn" data-id="${track.trackingNumber}"><i class="fa fa-trash fa-fw mr-1"></i> Delete</div>
 							<div class="dropdown-item move-up-btn" data-id="${track.trackingNumber}"><i class="fa fa-level-up fa-fw mr-1"></i> Move up</div>
@@ -103,21 +111,26 @@ async function render() {
 		`));
 	}
 
+	//hide/show no tracks message
 	$('.no-tracks').toggleClass('d-none', !!tracks.length);
+
+	await renderLoadingTracks();
 }
 
-function parseHtml(str: string) {
-	let done = false;
-	while (!done) {
-		let i = /\*if\(([^\)]+)\)\{([^\}]+)\}/.exec(str);
-		if (i) {
-			let condition = !!JSON.parse(i[1].replace(/'/g, '"'));
-			let val = i[2];
-			str = str.replace(i[0], condition ? val : '');
-		}
-		else {
-			done = true;
-		}
-	}
-	return str;
+async function renderLoadingTracks() {
+	//add loading track classes
+	let loadingTracks = await background.execute<string[]>('/loading');
+	$(`.tracks tr`).removeClass('loading');
+	loadingTracks.forEach(t => $(`.tracks tr[data-id='${t}'`).addClass('loading'));
 }
+
+chrome.runtime.onMessage.addListener((msg, sender, send) => {
+	new Promise(async resolve => {
+		//loading
+		if (msg.route == '/loading') {
+			await renderLoadingTracks();
+			resolve();
+		}
+	}).then(send)
+	return true;
+});

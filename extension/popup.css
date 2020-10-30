@@ -67,44 +67,32 @@ body {
 	background: #d4edda;
 }
 
-.tracks tr {
-	position: relative;
-	transform: scale(1);
-}
-
 .tracks tr.loading {
-	opacity: .4;
-	pointer-events: none;
+	background-image: linear-gradient(to right, transparent 50%, rgba(0, 0, 0, .05) 50%);
+	background-size: 200% 100%;
+	animation: loading 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-.tracks tr.loading:after { 
-	content: '';
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	background: #eee;
-	z-index: -1;
-	animation: loading 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+.tracks tr.loading td {
+	opacity: .45;
+	pointer-events: none;
 }
 
 @keyframes loading {
 
 	0% {
-		left: 0;
-		width: 0%;
+		background-position: 0;
 	}
 
 	50% {
-		width: 30%;
+		background-position: -30%;
 	}
 
 	80% {
-		left: 0%;
-		width: 100%;
+		background-position: -100%;
 	}
 
 	100% {
-		left: 100%;
-		width: 0%;
+		background-position: -200%;
 	}
 }
