@@ -79,7 +79,7 @@ class api {
   }
 
   static async fetchTrack(trackingNumber: string) {
-    return await this.fetch<Track>(`/track/${trackingNumber}`);
+    return await this.fetch<Track>(`/track/${trackingNumber}`).catch(t => null);
   }
 }
 
@@ -106,4 +106,10 @@ function parseHtml(str: string) {
     }
   }
   return str;
+}
+
+async function setBadge(count: number, isError?: boolean) {
+  let color = isError ? '#dc3545' : '#28a745';
+  await new Promise(r => chrome.browserAction.setBadgeBackgroundColor({ color: color }, r));
+  await new Promise(r => chrome.browserAction.setBadgeText({ text: count ? count.toString() : '' }, r));
 }

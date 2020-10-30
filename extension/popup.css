@@ -59,12 +59,12 @@ body {
 	font-size: 1.25rem;
 }
 
-.tracks tr:not(.flash) {
-	transition: background 1s;
+.tracks tr.flash {
+	background: #d4edda;
 }
 
-.flash {
-	background: #d4edda;
+.tracks tr:not(.flash) {
+	transition: background 1s;
 }
 
 .tracks tr.loading {

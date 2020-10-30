@@ -11,45 +11,29 @@ async function init() {
   // await update();
 }
 
-async function update() {
-  let updates = JSON.parse(localStorage.getItem('updates')) || [];
-  updates.push(new Date().toLocaleString());
-  localStorage.setItem('updates', JSON.stringify(updates));
-  console.log('updating...');
-
+async function refreshAll() {
+  console.log('updating all...');
 
   let trackingNumbers = (await storage.getTracks()).map(t => t.trackingNumber);
   for (let trackingNumber of trackingNumbers) {
-    let newTrack = await api.fetchTrack(trackingNumber);
-
-    let tracks = await storage.getTracks();
-    let track = tracks.find(t => t.trackingNumber == trackingNumber);
-
-    if (newTrack.status != track.status) {
-      await notify(newTrack.status, newTrack.trackingNumber);
-      let unreadTracks = await storage.getUnreadTracks();
-      if (!unreadTracks.includes(trackingNumber)) {
-        unreadTracks.push(trackingNumber);
-        await storage.setUnreadTracks(unreadTracks);
-        setBadge(unreadTracks.length);
-      }
-    }
-
-    Object.assign(track, newTrack);
-    track.updateCount = (track.updateCount || 0) + 1;
-    await storage.setTracks(tracks);
+    await refreshTrack(trackingNumber);
   }
 
-  console.log('updated');
+  console.log('update complete');
 }
 
-async function updateTrack(trackingNumber: string) {
+async function refreshTrack(trackingNumber: string) {
   console.log(`updating ${trackingNumber}...`);
   await storage.setLoadingTrack(trackingNumber, true);
   await popup.execute('/loading');
 
   let oldTrack = await storage.getTrack(trackingNumber);
   let track = await api.fetchTrack(trackingNumber);
+  if (!track) {
+    await storage.setLoadingTrack(trackingNumber, false);
+    await popup.execute('/loading');
+    console.log(`error updating ${trackingNumber}`);
+  }
 
   if (track.status != oldTrack.status) {
     await notify(track.status, track.trackingNumber);
@@ -94,15 +78,15 @@ async function notifySilent(title: string, message?: string) {
 //background router
 chrome.runtime.onMessage.addListener((msg, sender, send) => {
   new Promise(async resolve => {
-    //update
-    if (msg.route == '/update') {
-      await update();
+    //refresh all
+    if (msg.route == '/refresh') {
+      await refreshAll();
       resolve()
     }
     //sort
     if (msg.route == '/sort') {
       let tracks = await storage.getTracks();
-      tracks.sort((a, b) => new Date(a.date || new Date()).getTime() - new Date(b.date || new Date()).getTime())
+      tracks.sort((a, b) => (new Date(a.date).getTime() || Infinity) - (new Date(b.date).getTime() || Infinity))
       await storage.setTracks(tracks);
       resolve()
     }
@@ -141,7 +125,7 @@ chrome.runtime.onMessage.addListener((msg, sender, send) => {
     //refresh track
     if (msg.route == '/tracks/refresh') {
       let id: string = msg.data;
-      await updateTrack(id);
+      await refreshTrack(id);
       resolve();
     }
     //move track up
@@ -207,11 +191,5 @@ chrome.contextMenus.onClicked.addListener(info => {
 });
 
 chrome.alarms.onAlarm.addListener(info => {
-  if (info.name == 'alarm1') { update() }
+  if (info.name == 'alarm1') { refreshAll() }
 });
-
-async function setBadge(count: number, isError?: boolean) {
-  let color = isError ? '#dc3545' : '#28a745';
-  await new Promise(r => chrome.browserAction.setBadgeBackgroundColor({ color: color }, r));
-  await new Promise(r => chrome.browserAction.setBadgeText({ text: count ? count.toString() : '' }, r));
-}

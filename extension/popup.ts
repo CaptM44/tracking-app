@@ -5,7 +5,7 @@
 
 	//menu buttons
 	$('body').on('click', '.refresh-all-btn', async e => {
-		await background.execute('/update');
+		await background.execute('/refresh');
 		render();
 	});
 
