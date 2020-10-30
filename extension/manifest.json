@@ -17,7 +17,7 @@
 		"alarms",
 		"notifications"
 	],
-	"options_page": "options.html",
+	"options_page": "popup.html",
 	"icons": {
 		"16": "images/icon.png",
 		"48": "images/icon.png",

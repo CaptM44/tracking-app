@@ -2,6 +2,9 @@
 
 
 (async function () {
+	//add popup class when in popup view
+	$('body').toggleClass('popup', chrome.extension.getViews({ type: "popup" }).length > 0);
+
 
 	//menu buttons
 	$('body').on('click', '.refresh-all-btn', async e => {

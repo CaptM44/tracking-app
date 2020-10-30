@@ -1,9 +1,16 @@
 html {
 	font-size: 14px;
+	background: #eee;
 }
 
 body {
 	min-width: 600px;
+	min-height: 100vh;
+}
+
+body:not(.popup) {
+	max-width: 1000px;
+	margin: auto;
 }
 
 .header {

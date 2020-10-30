@@ -86,7 +86,9 @@ chrome.runtime.onMessage.addListener((msg, sender, send) => {
     //sort
     if (msg.route == '/sort') {
       let tracks = await storage.getTracks();
-      tracks.sort((a, b) => (new Date(a.date).getTime() || Infinity) - (new Date(b.date).getTime() || Infinity))
+      let asc = tracks.concat().sort((a, b) => (new Date(a.date).getTime() || Infinity) - (new Date(b.date).getTime() || Infinity));
+      let desc = asc.concat().reverse();
+      tracks = JSON.stringify(tracks) == JSON.stringify(asc) ? desc : asc;
       await storage.setTracks(tracks);
       resolve()
     }
