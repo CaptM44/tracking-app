@@ -96,8 +96,8 @@ async function render() {
 				<td>${track.description || ''}</td>
 				*if(${!!track.url}){<td><a href="${track.url}" target="_blank">${track.trackingNumber}</a></td>}
 				*if(${!track.url}){<td>${track.trackingNumber}</td>}
-				<td class="${track.status == 'Delivered' ? 'text-success' : ''}">${track.status || 'N/A'}</td>
-				<td title="update count: ${track.updateCount}">${track.date ? formatDate(track.date) : 'N/A'}</td>
+				<td class="${track.status == 'Delivered' ? 'text-success' : ''}">${track.status || N_A()}</td>
+				<td title="update count: ${track.updateCount}">${track.date ? formatDate(track.date) : N_A()}</td>
 				<td>
 					<div class="dropdown">
 						<div class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></div>

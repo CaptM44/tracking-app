@@ -5,12 +5,12 @@ html {
 
 body {
 	min-width: 600px;
-	min-height: 100vh;
 }
 
 body:not(.popup) {
-	max-width: 1000px;
 	margin: auto;
+	max-width: 1000px;
+	min-height: 100vh;
 }
 
 .header {
@@ -38,6 +38,11 @@ body:not(.popup) {
 
 .col-min {
 	width: 1%;
+}
+
+.na {
+	opacity: .45;
+	font-style: italic;
 }
 
 .dropdown-toggle::after {

@@ -92,6 +92,10 @@ function formatDate(date: Date | string) {
   return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
+function N_A() {
+  return '<span class="na">N/A</span>'
+}
+
 function parseHtml(str: string) {
   let done = false;
   while (!done) {
