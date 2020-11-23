@@ -112,6 +112,7 @@ function normalizeStatus(status: string) {
 
 	//UPS
 	if (/Shipment Ready for UPS/i.test(status)) { return 'Shipment Ready' }
+	if (/On Its Way to UPS/i.test(status)) { return 'On Its Way to Carrier' }
 	if (/Damage Reported/i.test(status)) { return 'Damage Reported' }
 
 	return status;
